@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<title>Lista Libri Classe Verde</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 30px;
+    background-color: #f9f9f9;
+    color: #333;
+  }
+  h2 {
+    text-align: center;
+    color: #2c3e50;
+  }
+  #container {
+    max-width: 800px;
+    margin: auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+  table {
+    border-collapse: collapse;
+    width: 100%;
+  }
+  th, td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+  th {
+    background-color: #f2f2f2;
+  }
+  .barrato {
+    text-decoration: line-through;
+    color: #999;
+  }
+  input[type="text"] {
+    width: 70%;
+    padding: 8px;
+    margin-top: 10px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+  }
+  button {
+    padding: 8px 14px;
+    margin-left: 5px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 6px;
+    background-color: #3498db;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+  button:hover {
+    background-color: #2980b9;
+  }
+  @media (max-width: 600px) {
+    input[type="text"] {
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    button {
+      width: 48%;
+      margin: 5px 1%;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div id="container">
+<h2>Lista Libri Classe Verde</h2>
+
+<table id="libriTable">
+  <thead>
+    <tr>
+      <th>Seleziona</th>
+      <th>Titolo</th>
+    </tr>
+  </thead>
+  <tbody>
+  </tbody>
+</table>
+
+<div>
+  <input type="text" id="nuovoLibro" placeholder="Inserisci nuovo libro">
+  <button onclick="aggiungiRiga()">+</button>
+  <button onclick="rimuoviSelezionati()">Rimuovi selezionati</button>
+</div>
+</div>
+
+<script>
+// Lista iniziale
+let libri = [
+  "Il gufo",
+  "Sotto la pioggia di Nicoletta Costa",
+  "Orecchie di farfalla di Luisa Aguilar",
+  "La cena di Natale di Daniel Dargent, Magali Le Huche",
+  "La buca di Emma Adbåge",
+  "Sulla collina di Linda Sarah, EDT-Giralangolo, 2015",
+  "Hai visto la mia coda di Alberto Lot",
+  "Il cucciolo di Nina di Christine Naumann-Villemin, Il Castoro, 2003",
+  "Balena serena di Eric Battut, I Bohemien",
+  "Rulba Rulba di Bussolati, Ed. Carthusia",
+  "Piccolo coccodrillo va al parco di Eva Montanari, Babalibri",
+  "Domani a scuola di Emile Jadoul, Babalibri",
+  "Il mondo a testa in giù di Mario Ramos, Babalibri",
+  "Sono il rinoceronte di Geoffroy de Pennart, Babalibri",
+  "Ruby e la storia di quando incontrò una preoccupazione di Tom Percival, Giunti",
+  "Cappuccetto Verde di Bruno Munari, Corraini",
+  "Bastoncino di Julia Donaldson, Emme Edizioni",
+  "Piccolo riccio non vuole dormire di Maria Loretta Giraldo, Giunti",
+  "Come ti senti oggi? Il libro delle emozioni di Molly Potter, Giunti Editore",
+  "Lucy e il filo dell’amicizia di Vanessa Roeder, Edizioni Terre di Mezzo",
+  "Gaia e Maia uguali ma diverse di Mylo Freeman",
+  "A chi somiglio di Yu Jin, Edizioni Terre di Mezzo",
+  "Un gioco da ragazze di Alessandra Lazzarin, Edizioni Orecchio Acerbo",
+  "Federica e Federico di Irene Biemmi, Giunti Kids",
+  "Se vuoi vedere una balena, Bababum",
+  "Papa Isola, Bababum",
+  "La casa più grande del mondo, Bababum",
+  "Io sono adesso, Babalibri",
+  "La sedia blu, Bababum"
+];
+
+// Carica dati da localStorage
+if (localStorage.getItem('libriSalvati')) {
+  libri = JSON.parse(localStorage.getItem('libriSalvati'));
+}
+
+// Funzione per creare una riga
+function creaRiga(libro, checked = false) {
+  const tbody = document.querySelector("#libriTable tbody");
+  const tr = document.createElement("tr");
+  
+  const tdCheck = document.createElement("td");
+  const checkbox = document.createElement("input");
+  checkbox.type = "checkbox";
+  checkbox.checked = checked;
+  const tdTitolo = document.createElement("td");
+  const titolo = document.createElement("span");
+  titolo.textContent = libro;
+  if (checked) titolo.classList.add("barrato");
+  
+  checkbox.addEventListener("change", () => {
+    if (checkbox.checked) titolo.classList.add("barrato");
+    else titolo.classList.remove("barrato");
+    salvaDati();
+  });
+  
+  tdCheck.appendChild(checkbox);
+  tdTitolo.appendChild(titolo);
+  tr.appendChild(tdCheck);
+  tr.appendChild(tdTitolo);
+  tbody.appendChild(tr);
+}
+
+// Crea tabella iniziale
+function creaTabella() {
+  const tbody = document.querySelector("#libriTable tbody");
+  tbody.innerHTML = "";
+  libri.forEach(item => {
+    if (typeof item === 'string') creaRiga(item);
+    else creaRiga(item.titolo, item.checked);
+  });
+}
+
+// Aggiungi nuova riga
+function aggiungiRiga() {
+  const input = document.getElementById("nuovoLibro");
+  const libro = input.value.trim();
+  if (libro) {
+    creaRiga(libro);
+    libri.push(libro);
+    input.value = "";
+    input.focus();
+    salvaDati();
+  }
+}
+
+// Rimuovi selezionati
+function rimuoviSelezionati() {
+  const tbody = document.querySelector("#libriTable tbody");
+  const righe = Array.from(tbody.querySelectorAll("tr"));
+  righe.forEach((tr, index) => {
+    const checkbox = tr.querySelector("input[type=checkbox]");
+    if (checkbox.checked) {
+      tbody.removeChild(tr);
+      libri.splice(index,1);
+    }
+  });
+  salvaDati();
+}
+
+// Salva in localStorage
+function salvaDati() {
+  const tbody = document.querySelector("#libriTable tbody");
+  const dati = [];
+  const righe = Array.from(tbody.querySelectorAll("tr"));
+  righe.forEach(tr => {
+    const checkbox = tr.querySelector("input[type=checkbox]");
+    const titolo = tr.querySelector("td:nth-child(2) span").textContent;
+    dati.push({titolo: titolo, checked: checkbox.checked});
+  });
+  localStorage.setItem('libriSalvati', JSON.stringify(dati));
+}
+
+// Inizializza tabella
+creaTabella();
+</script>
+
+</body>
+</html>
