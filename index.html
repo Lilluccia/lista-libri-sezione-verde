@@ -1,109 +1,109 @@
 <!DOCTYPE html>
 <html lang="it">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
 <title>Lista Libri</title>
-
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    background-color: #e8f5e9;
+  /* Reset box-sizing */
+  *, *::before, *::after { box-sizing: border-box; }
+
+  body{
+    font-family: Arial, Helvetica, sans-serif;
     margin: 0;
-    padding: 15px;
-  }
-  h1 {
-    text-align: center;
-    color: #1b5e20;
-  }
-  #searchBar {
-    width: 100%;
-    padding: 14px;
-    margin-top: 10px;
-    border-radius: 10px;
-    border: 2px solid #66bb6a;
-    font-size: 16px;
-  }
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 15px;
-  }
-  th, td {
-    padding: 12px;
-    border-bottom: 2px solid #c8e6c9;
-    vertical-align: middle;
-  }
-  th {
-    background-color: #4caf50;
-    color: white;
-    text-align: left;
-  }
-  td:first-child { width: 45px; text-align: center; }
-  td:last-child { width: 90px; text-align: center; }
-  tr.checked td:nth-child(2) {
-    text-decoration: line-through;
-    color: #2e7d32;
-  }
-  #inputContainer {
-    display: flex;
-    flex-wrap: wrap;
-    margin-top: 15px;
-    gap: 10px;
-  }
-  #newBook {
-    flex: 1;
     padding: 16px;
-    border-radius: 10px;
-    border: 2px solid #66bb6a;
-    font-size: 18px;
+    background:#e8f5e9;
+    color:#1b5e20;
   }
-  #addBtn {
-    padding: 16px 12px;
-    border: none;
-    border-radius: 10px;
-    background-color: #4caf50;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.2s;
-    flex: 0 0 auto;
+
+  h1{ text-align:center; margin:8px 0 12px; font-size:20px; }
+
+  /* Search */
+  #searchBar{
+    width:100%;
+    padding:12px 14px;
+    border-radius:10px;
+    border:2px solid #66bb6a;
+    font-size:16px;
   }
-  #addBtn:hover { background-color: #388e3c; }
-  .remove-btn {
-    background: transparent;
-    color: #b71c1c;
-    font-size: 14px;
-    cursor: pointer;
-    border: none;
-    padding: 8px;
+
+  /* Table */
+  table{ width:100%; border-collapse:collapse; margin-top:12px; }
+  th, td{ padding:12px; border-bottom:2px solid #c8e6c9; vertical-align:middle; }
+  th{ background:#4caf50; color:#fff; text-align:left; }
+  td:first-child{ width:45px; text-align:center; }
+  td:last-child{ width:100px; text-align:center; }
+
+  tr.checked td:nth-child(2){ text-decoration:line-through; color:#2e7d32; }
+
+  /* Input + add */
+  #inputContainer{ display:flex; flex-wrap:wrap; gap:10px; margin-top:12px; }
+  #newBook{
+    flex:1;
+    padding:14px;
+    border-radius:10px;
+    border:2px solid #66bb6a;
+    font-size:16px;
   }
-  .remove-btn:hover { color: red; }
-  #downloadBtn {
-    width: 100%;
-    margin-top: 10px;
-    padding: 14px;
-    border: none;
-    border-radius: 10px;
-    background-color: #4caf50;
-    color: white;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.2s;
+  #addBtn{
+    padding:12px 10px;
+    border-radius:10px;
+    border:none;
+    background:#4caf50;
+    color:#fff;
+    font-size:15px;
+    cursor:pointer;
+    flex:0 0 auto;
   }
-  #downloadBtn:hover { background-color: #388e3c; }
-  @media (max-width: 500px) {
-    #inputContainer { flex-direction: column; }
-    #addBtn { width: 100%; flex: 1 1 100%; }
+  #addBtn:active{ transform:translateY(1px); }
+
+  /* Download button full width below */
+  #downloadBtn{
+    width:100%;
+    margin-top:10px;
+    padding:12px;
+    border-radius:10px;
+    border:none;
+    background:#4caf50;
+    color:#fff;
+    font-size:16px;
+    cursor:pointer;
+  }
+
+  /* Remove button */
+  .remove-btn{
+    background:transparent;
+    color:#b71c1c;
+    border:none;
+    cursor:pointer;
+    padding:8px;
+    font-size:14px;
+  }
+
+  .remove-btn:hover{ color:red; }
+
+  /* Tiny status */
+  #status{
+    font-size:13px;
+    color:#2e7d32;
+    margin-top:8px;
+    opacity:0.95;
+  }
+
+  @media (max-width:520px){
+    th, td{ font-size:14px; padding:10px; }
+    #newBook{ font-size:16px; padding:12px; }
+    #addBtn{ padding:12px; font-size:15px; width:auto; }
   }
 </style>
 </head>
 <body>
 
-<h1>Lista Libri sezione Verde 📚</h1>
-<input type="text" id="searchBar" placeholder="🔍 Cerca un libro..." onkeyup="searchBooks()">
+<h1>Lista Libri sezione VERDE 📚</h1>
 
-<table id="listaLibri">
+<input id="searchBar" placeholder="🔍 Cerca un libro..." oninput="searchBooks()" />
+
+<table id="listaLibri" aria-label="Lista libri">
   <thead>
     <tr><th></th><th>Titolo</th><th>Rimuovi</th></tr>
   </thead>
@@ -111,18 +111,28 @@
 </table>
 
 <div id="inputContainer">
-  <input type="text" id="newBook" placeholder="Aggiungi un nuovo libro...">
+  <input id="newBook" placeholder="Aggiungi un nuovo libro..." />
   <button id="addBtn" onclick="addBook()">+ Aggiungi</button>
 </div>
 
 <button id="downloadBtn" onclick="downloadPDF()">📄 Scarica PDF</button>
 
+<div id="status" aria-live="polite"></div>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-// URL del tuo Apps Script
+/*
+  Versione ottimizzata client-side:
+  - mostra lista iniziale subito (locale)
+  - carica Google Sheet in background
+  - se foglio vuoto viene popolato con la lista iniziale (1 sola POST)
+  - ogni modifica chiama scheduleSave() (debounced) -> 1 POST quando ci sono 800ms di inattività
+  - filtra righe vuote ricevute dal server
+*/
+
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbys-btDiNK4mul_1XifZoblmSQlNN54FH4zBGQ6xEd9LtwDdEnOORDxvLxRAejcQeBm/exec";
 
-// Lista libri iniziale lato client
+// lista locale iniziale (mostrata subito)
 const libriIniziali = [
 "Il gufo","Sotto la pioggia di Nicoletta Costa","Orecchie di farfalla di Luisa Aguilar",
 "La cena di Natale di Daniel Dargent, Magali Le Huche","La buca di Emma Adbåge",
@@ -142,99 +152,174 @@ const libriIniziali = [
 "La sedia blu, Bababum"
 ];
 
-let libri = libriIniziali.map(t => ({flag:false, titolo:t}));
+// stato locale
+let libri = libriIniziali.map(t => ({ flag: false, titolo: t }));
+let remoteLoaded = false;
 
-// Carica dati dal foglio
-async function loadSheet() {
+// debounce/scheduler per salvataggi (minimizza richieste)
+let saveTimer = null;
+const SAVE_DELAY = 800; // ms
+
+// UI refs
+const tbody = document.querySelector("#listaLibri tbody");
+const statusEl = document.getElementById("status");
+const searchInput = document.getElementById("searchBar");
+
+/* ---------- render veloce (mostra ciò che abbiamo) ---------- */
+function renderList() {
+  tbody.innerHTML = "";
+  libri.forEach((l, i) => {
+    if (!l || !l.titolo) return; // skip voci vuote
+
+    const tr = document.createElement("tr");
+    if (l.flag) tr.classList.add("checked");
+
+    // checkbox
+    const tdFlag = document.createElement("td");
+    const cb = document.createElement("input");
+    cb.type = "checkbox";
+    cb.checked = !!l.flag;
+    cb.addEventListener("change", () => {
+      l.flag = cb.checked;
+      scheduleSave();
+      // update visual immediately
+      if (l.flag) tr.classList.add("checked"); else tr.classList.remove("checked");
+    });
+    tdFlag.appendChild(cb);
+
+    // titolo
+    const tdTit = document.createElement("td");
+    tdTit.textContent = l.titolo;
+
+    // rimuovi
+    const tdRm = document.createElement("td");
+    const btn = document.createElement("button");
+    btn.className = "remove-btn";
+    btn.textContent = "Rimuovi";
+    btn.addEventListener("click", () => {
+      libri.splice(i, 1);
+      scheduleSave();
+      renderList();
+    });
+    tdRm.appendChild(btn);
+
+    tr.appendChild(tdFlag);
+    tr.appendChild(tdTit);
+    tr.appendChild(tdRm);
+    tbody.appendChild(tr);
+  });
+
+  // riapplica filtro di ricerca
+  searchBooks();
+}
+
+/* ---------- fetch remote (carica foglio) ---------- */
+async function fetchRemote() {
+  setStatus("Caricamento dati dal server...");
   try {
     const res = await fetch(SHEET_URL);
-    const data = await res.json();
-    if(data.length > 0) {
-      libri = data.map(r=>({flag:r[0], titolo:r[1]}));
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const data = await res.json(); // aspettandoci array di [flag, titolo]
+
+    // filtra righe senza titolo (evita riga fantasma)
+    const filtered = data.filter(r => r && r[1] && r[1].toString().trim() !== "");
+
+    if (filtered.length > 0) {
+      // usa il remote come fonte di verità
+      libri = filtered.map(r => ({ flag: !!r[0], titolo: String(r[1]) }));
+      remoteLoaded = true;
+      setStatus("Sincronizzato con Google Sheet.");
+      renderList();
     } else {
-      // salva lista iniziale se foglio vuoto
-      saveSheet();
+      // foglio vuoto -> popolalo con la lista iniziale (una sola POST)
+      setStatus("Foglio vuoto: inizializzo con lista predefinita...");
+      await saveNow(); // salva intero array (lista iniziale) sul foglio
+      remoteLoaded = true;
+      setStatus("Inizializzazione completata.");
     }
-    renderList();
-  } catch(e) {
-    console.warn("Errore fetch Google Sheet, uso lista locale", e);
+
+  } catch (err) {
+    console.warn("Errore caricamento remote:", err);
+    // mostra lista locale comunque (già presente)
+    setStatus("Offline o errore server: uso dati locali.");
     renderList();
   }
 }
 
-// Salva dati
-async function saveSheet() {
+/* ---------- salva in background (debounced) ---------- */
+function scheduleSave() {
+  // se viene chiamato molte volte, resetta timer
+  if (saveTimer) clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => {
+    saveNow();
+  }, SAVE_DELAY);
+}
+
+async function saveNow() {
+  // invia l'intero payload (semplice e robusto)
   try {
-    const payload = libri.map(l=>[l.flag, l.titolo]);
-    await fetch(SHEET_URL, {method:"POST", body:JSON.stringify(payload)});
-  } catch(e){console.warn("Errore salvataggio Google Sheet",e);}
+    setStatus("Salvataggio in corso...");
+    const payload = libri.map(l => [!!l.flag, l.titolo || ""]);
+    const res = await fetch(SHEET_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    setStatus("Salvato su Google Sheet.");
+  } catch (err) {
+    console.error("Errore salvataggio:", err);
+    setStatus("Errore salvataggio (controlla connessione).");
+  }
 }
 
-// Render
-function renderList() {
-  const tbody=document.querySelector("#listaLibri tbody");
-  tbody.innerHTML="";
-  libri.forEach((l,i)=>{
-    const tr=document.createElement("tr");
-    if(l.flag) tr.classList.add("checked");
-
-    const tdFlag=document.createElement("td");
-    const checkbox=document.createElement("input");
-    checkbox.type="checkbox";
-    checkbox.checked=l.flag;
-    checkbox.onchange=()=>{l.flag=checkbox.checked; saveSheet(); renderList();};
-    tdFlag.appendChild(checkbox);
-
-    const tdTitolo=document.createElement("td");
-    tdTitolo.textContent=l.titolo;
-
-    const tdRemove=document.createElement("td");
-    const btn=document.createElement("button");
-    btn.className="remove-btn"; btn.textContent="Rimuovi";
-    btn.onclick=()=>{libri.splice(i,1); saveSheet(); renderList();};
-    tdRemove.appendChild(btn);
-
-    tr.appendChild(tdFlag);
-    tr.appendChild(tdTitolo);
-    tr.appendChild(tdRemove);
-    tbody.appendChild(tr);
-  });
-  searchBooks();
-}
-
-// Aggiungi libro
+/* ---------- utility: aggiungi, ricerca, pdf ---------- */
 function addBook() {
-  const val=document.getElementById("newBook").value.trim();
-  if(!val) return;
-  libri.push({flag:false, titolo:val});
-  document.getElementById("newBook").value="";
-  saveSheet(); renderList();
-  setTimeout(()=>{window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});},100);
+  const val = document.getElementById("newBook").value.trim();
+  if (!val) return;
+  libri.push({ flag: false, titolo: val });
+  document.getElementById("newBook").value = "";
+  renderList();
+  scheduleSave();
+  setTimeout(()=>{ window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" }); }, 120);
 }
 
-// Ricerca live
 function searchBooks() {
-  const s=document.getElementById("searchBar").value.toLowerCase();
-  document.querySelectorAll("#listaLibri tbody tr").forEach(tr=>{
-    const t=tr.querySelector("td:nth-child(2)").textContent.toLowerCase();
-    tr.style.display=t.includes(s)?"":"none";
+  const q = searchInput.value.toLowerCase();
+  document.querySelectorAll("#listaLibri tbody tr").forEach(row => {
+    const tit = row.querySelector("td:nth-child(2)").textContent.toLowerCase();
+    row.style.display = tit.includes(q) ? "" : "none";
   });
 }
 
-// PDF
 function downloadPDF() {
-  const { jsPDF }=window.jspdf;
-  const doc=new jsPDF(); let y=20;
-  doc.setFontSize(18); doc.text("Lista Libri da Leggere",10,y); y+=10;
-  doc.setFontSize(12);
-  libri.forEach(l=>{
-    doc.text((l.flag?"✔︎ ":"")+l.titolo,10,y); y+=7;
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  let y = 18;
+  doc.setFontSize(16);
+  doc.text("Lista Libri da Leggere", 10, y); y += 8;
+  doc.setFontSize(11);
+  libri.forEach(l => {
+    if (!l || !l.titolo) return;
+    const text = (l.flag ? "✔︎ " : "") + l.titolo;
+    // wrap long lines if necessary
+    const lines = doc.splitTextToSize(text, 180);
+    doc.text(lines, 10, y);
+    y += (lines.length * 6) + 2;
+    if (y > 270) { doc.addPage(); y = 20; }
   });
   doc.save("lista_libri.pdf");
 }
 
-// Init
-loadSheet();
+/* ---------- helper UI ---------- */
+function setStatus(msg) {
+  statusEl.textContent = msg || "";
+}
+
+/* ---------- init: render subito, poi fetch remoto in background ---------- */
+renderList();      // mostra lista iniziale rapidamente
+fetchRemote();     // sincronizza con il foglio (in background)
+
 </script>
 </body>
 </html>
