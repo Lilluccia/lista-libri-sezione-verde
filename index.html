@@ -189,4 +189,31 @@ function searchBooks(){
   const q=searchInput.value.toLowerCase();
   document.querySelectorAll("#listaLibri tbody tr").forEach(row=>{
     const tit=row.querySelector("td:nth-child(2)").textContent.toLowerCase();
-    row.style.display = tit.includes(q) ?
+    row.style.display = tit.includes(q) ? "" : "none";
+  });
+}
+
+function downloadPDF(){
+  const {jsPDF}=window.jspdf;
+  const doc=new jsPDF();
+  let y=18;
+  doc.setFontSize(16); doc.text("Lista Libri da Leggere",10,y); y+=8;
+  doc.setFontSize(11);
+  libri.forEach(l=>{
+    if(!l||!l.titolo) return;
+    const text=(l.flag?"✔︎ ":"")+l.titolo;
+    const lines=doc.splitTextToSize(text,180);
+    doc.text(lines,10,y);
+    y+=(lines.length*6)+2;
+    if(y>270){doc.addPage();y=20;}
+  });
+  doc.save("lista_libri.pdf");
+}
+
+function setStatus(msg){ statusEl.textContent=msg||""; }
+
+renderList();
+fetchRemote();
+</script>
+</body>
+</html>
