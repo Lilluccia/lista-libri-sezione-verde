@@ -12,12 +12,10 @@
     margin: 0;
     padding: 15px;
   }
-
   h1 {
     text-align: center;
     color: #1b5e20;
   }
-
   #searchBar {
     width: 100%;
     padding: 14px;
@@ -26,47 +24,33 @@
     border: 2px solid #66bb6a;
     font-size: 16px;
   }
-
   table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 15px;
   }
-
   th, td {
     padding: 12px;
     border-bottom: 2px solid #c8e6c9;
     vertical-align: middle;
   }
-
   th {
     background-color: #4caf50;
     color: white;
     text-align: left;
   }
-
-  td:first-child {
-    width: 45px;
-    text-align: center;
-  }
-
-  td:last-child {
-    width: 90px;
-    text-align: center;
-  }
-
+  td:first-child { width: 45px; text-align: center; }
+  td:last-child { width: 90px; text-align: center; }
   tr.checked td:nth-child(2) {
     text-decoration: line-through;
     color: #2e7d32;
   }
-
   #inputContainer {
     display: flex;
     flex-wrap: wrap;
     margin-top: 15px;
     gap: 10px;
   }
-
   #newBook {
     flex: 1;
     padding: 16px;
@@ -74,7 +58,6 @@
     border: 2px solid #66bb6a;
     font-size: 18px;
   }
-
   #addBtn {
     padding: 16px 12px;
     border: none;
@@ -86,11 +69,7 @@
     transition: background 0.2s;
     flex: 0 0 auto;
   }
-
-  #addBtn:hover {
-    background-color: #388e3c;
-  }
-
+  #addBtn:hover { background-color: #388e3c; }
   .remove-btn {
     background: transparent;
     color: #b71c1c;
@@ -99,11 +78,7 @@
     border: none;
     padding: 8px;
   }
-
-  .remove-btn:hover {
-    color: red;
-  }
-
+  .remove-btn:hover { color: red; }
   #downloadBtn {
     width: 100%;
     margin-top: 10px;
@@ -116,36 +91,21 @@
     cursor: pointer;
     transition: background 0.2s;
   }
-
-  #downloadBtn:hover {
-    background-color: #388e3c;
-  }
-
+  #downloadBtn:hover { background-color: #388e3c; }
   @media (max-width: 500px) {
-    #inputContainer {
-      flex-direction: column;
-    }
-
-    #addBtn {
-      width: 100%;
-      flex: 1 1 100%;
-    }
+    #inputContainer { flex-direction: column; }
+    #addBtn { width: 100%; flex: 1 1 100%; }
   }
 </style>
 </head>
 <body>
 
-<h1>Lista Libri da Leggere 📚✔️</h1>
-
+<h1>Lista Libri sezione Verde 📚</h1>
 <input type="text" id="searchBar" placeholder="🔍 Cerca un libro..." onkeyup="searchBooks()">
 
 <table id="listaLibri">
   <thead>
-    <tr>
-      <th></th>
-      <th>Titolo</th>
-      <th>Rimuovi</th>
-    </tr>
+    <tr><th></th><th>Titolo</th><th>Rimuovi</th></tr>
   </thead>
   <tbody></tbody>
 </table>
@@ -159,107 +119,79 @@
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <script>
-// ---- URL del tuo Apps Script ----
+// URL del tuo Apps Script
 const SHEET_URL = "https://script.google.com/macros/s/AKfycbx_fcm6wEapwifP4ZkZazSN6oNj_sV0NYmJDV5sNMEpQG_YyYeS-ObEKu6w2nM9zXqT/exec";
 
-// Lista iniziale dei libri
+// Lista libri iniziale lato client
 const libriIniziali = [
-"Il gufo",
-"Sotto la pioggia di Nicoletta Costa",
-"Orecchie di farfalla di Luisa Aguilar",
-"La cena di Natale di Daniel Dargent, Magali Le Huche",
-"La buca di Emma Adbåge",
-"Sulla collina di Linda Sarah, EDT-Giralangolo, 2015",
-"Hai visto la mia coda di Alberto Lot",
-"Il cucciolo di Nina di Christine Naumann-Villemin, Il Castoro, 2003",
-"Balena serena di Eric Battut, I Bohemien",
-"Rulba Rulba di Bussolati, Ed. Carthusia",
-"Piccolo coccodrillo va al parco di Eva Montanari, Babalibri",
-"Domani a scuola di Emile Jadoul, Babalibri",
-"Il mondo a testa in giù di Mario Ramos, Babalibri",
-"Sono il rinoceronte di Geoffroy de Pennart, Babalibri",
-"Ruby e la storia di quando incontrò una preoccupazione di Tom Percival, Giunti",
-"Cappuccetto Verde di Bruno Munari, Corraini",
-"Bastoncino di Julia Donaldson, Emme Edizioni",
+"Il gufo","Sotto la pioggia di Nicoletta Costa","Orecchie di farfalla di Luisa Aguilar",
+"La cena di Natale di Daniel Dargent, Magali Le Huche","La buca di Emma Adbåge",
+"Sulla collina di Linda Sarah, EDT-Giralangolo, 2015","Hai visto la mia coda di Alberto Lot",
+"Il cucciolo di Nina di Christine Naumann-Villemin, Il Castoro, 2003","Balena serena di Eric Battut, I Bohemien",
+"Rulba Rulba di Bussolati, Ed. Carthusia","Piccolo coccodrillo va al parco di Eva Montanari, Babalibri",
+"Domani a scuola di Emile Jadoul, Babalibri","Il mondo a testa in giù di Mario Ramos, Babalibri",
+"Sono il rinoceronte di Geoffroy de Pennart, Babalibri","Ruby e la storia di quando incontrò una preoccupazione di Tom Percival, Giunti",
+"Cappuccetto Verde di Bruno Munari, Corraini","Bastoncino di Julia Donaldson, Emme Edizioni",
 "Piccolo riccio non vuole dormire di Maria Loretta Giraldo, Giunti",
 "Come ti senti oggi? Il libro delle emozioni di Molly Potter, Giunti Editore",
 "Lucy e il filo dell’amicizia di Vanessa Roeder, Edizioni Terre di Mezzo",
 "Gaia e Maia uguali ma diverse di Mylo Freeman",
-"A chi somiglio di Yu Jin, Edizioni Terre di Mezzo",
-"Un gioco da ragazze di Alessandra Lazzarin, Edizioni Orecchio Acerbo",
-"Federica e Federico di Irene Biemmi, Giunti Kids",
-"Se vuoi vedere una balena, Bababum",
-"Papa Isola, Bababum",
-"La casa più grande del mondo, Bababum",
-"Io sono adesso, Babalibri",
+"A chi somiglio di Yu Jin, Edizioni Terre di Mezzo","Un gioco da ragazze di Alessandra Lazzarin, Edizioni Orecchio Acerbo",
+"Federica e Federico di Irene Biemmi, Giunti Kids","Se vuoi vedere una balena, Bababum",
+"Papa Isola, Bababum","La casa più grande del mondo, Bababum","Io sono adesso, Babalibri",
 "La sedia blu, Bababum"
 ];
 
 let libri = libriIniziali.map(t => ({flag:false, titolo:t}));
 
-// Carica dati dal Google Sheet
+// Carica dati dal foglio
 async function loadSheet() {
   try {
     const res = await fetch(SHEET_URL);
     const data = await res.json();
-    if(data.length === 0) { 
-      // se foglio vuoto, carica lista iniziale
-      saveSheet();
+    if(data.length > 0) {
+      libri = data.map(r=>({flag:r[0], titolo:r[1]}));
     } else {
-      libri = data.map(r => ({flag: r[0], titolo: r[1]}));
+      // salva lista iniziale se foglio vuoto
+      saveSheet();
     }
     renderList();
   } catch(e) {
-    console.error("Errore caricamento Google Sheet:", e);
+    console.warn("Errore fetch Google Sheet, uso lista locale", e);
     renderList();
   }
 }
 
-// Salva dati su Google Sheet
+// Salva dati
 async function saveSheet() {
   try {
-    const payload = libri.map(l => [l.flag, l.titolo]);
-    await fetch(SHEET_URL, {
-      method: "POST",
-      body: JSON.stringify(payload)
-    });
-  } catch(e) {
-    console.error("Errore salvataggio Google Sheet:", e);
-  }
+    const payload = libri.map(l=>[l.flag, l.titolo]);
+    await fetch(SHEET_URL, {method:"POST", body:JSON.stringify(payload)});
+  } catch(e){console.warn("Errore salvataggio Google Sheet",e);}
 }
 
-// Render lista
+// Render
 function renderList() {
-  const tbody = document.querySelector("#listaLibri tbody");
-  tbody.innerHTML = "";
+  const tbody=document.querySelector("#listaLibri tbody");
+  tbody.innerHTML="";
+  libri.forEach((l,i)=>{
+    const tr=document.createElement("tr");
+    if(l.flag) tr.classList.add("checked");
 
-  libri.forEach((l, i) => {
-    const tr = document.createElement("tr");
-    if (l.flag) tr.classList.add("checked");
-
-    const tdFlag = document.createElement("td");
-    const checkbox = document.createElement("input");
-    checkbox.type = "checkbox";
-    checkbox.checked = !!l.flag;
-    checkbox.onchange = () => {
-      l.flag = checkbox.checked;
-      saveSheet();
-      renderList();
-    };
+    const tdFlag=document.createElement("td");
+    const checkbox=document.createElement("input");
+    checkbox.type="checkbox";
+    checkbox.checked=l.flag;
+    checkbox.onchange=()=>{l.flag=checkbox.checked; saveSheet(); renderList();};
     tdFlag.appendChild(checkbox);
 
-    const tdTitolo = document.createElement("td");
-    tdTitolo.textContent = l.titolo;
+    const tdTitolo=document.createElement("td");
+    tdTitolo.textContent=l.titolo;
 
-    const tdRemove = document.createElement("td");
-    const btn = document.createElement("button");
-    btn.className = "remove-btn";
-    btn.textContent = "Rimuovi";
-    btn.onclick = () => {
-      libri.splice(i,1);
-      saveSheet();
-      renderList();
-    };
+    const tdRemove=document.createElement("td");
+    const btn=document.createElement("button");
+    btn.className="remove-btn"; btn.textContent="Rimuovi";
+    btn.onclick=()=>{libri.splice(i,1); saveSheet(); renderList();};
     tdRemove.appendChild(btn);
 
     tr.appendChild(tdFlag);
@@ -267,41 +199,42 @@ function renderList() {
     tr.appendChild(tdRemove);
     tbody.appendChild(tr);
   });
-
   searchBooks();
 }
 
 // Aggiungi libro
 function addBook() {
-  const val = document.getElementById("newBook").value.trim();
+  const val=document.getElementById("newBook").value.trim();
   if(!val) return;
-  libri.push({flag:false, titolo: val});
+  libri.push({flag:false, titolo:val});
   document.getElementById("newBook").value="";
-  saveSheet();
-  renderList();
-  setTimeout(()=>{window.scrollTo({top: document.body.scrollHeight, behavior:"smooth"});},100);
+  saveSheet(); renderList();
+  setTimeout(()=>{window.scrollTo({top:document.body.scrollHeight,behavior:"smooth"});},100);
 }
 
 // Ricerca live
 function searchBooks() {
-  const s = document.getElementById("searchBar").value.toLowerCase();
+  const s=document.getElementById("searchBar").value.toLowerCase();
   document.querySelectorAll("#listaLibri tbody tr").forEach(tr=>{
-    const t = tr.querySelector("td:nth-child(2)").textContent.toLowerCase();
-    tr.style.display = t.includes(s)?"":"none";
+    const t=tr.querySelector("td:nth-child(2)").textContent.toLowerCase();
+    tr.style.display=t.includes(s)?"":"none";
   });
 }
 
-// Scarica PDF
+// PDF
 function downloadPDF() {
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-  let y = 20;
-
-  doc.setFontSize(18);
-  doc.text("Lista Libri da Leggere", 10, y);
-  y += 10;
-
+  const { jsPDF }=window.jspdf;
+  const doc=new jsPDF(); let y=20;
+  doc.setFontSize(18); doc.text("Lista Libri da Leggere",10,y); y+=10;
   doc.setFontSize(12);
   libri.forEach(l=>{
-    const text = l.flag ? "✔︎ " + l.titolo : l.titolo;
-    doc.text(text
+    doc.text((l.flag?"✔︎ ":"")+l.titolo,10,y); y+=7;
+  });
+  doc.save("lista_libri.pdf");
+}
+
+// Init
+loadSheet();
+</script>
+</body>
+</html>
